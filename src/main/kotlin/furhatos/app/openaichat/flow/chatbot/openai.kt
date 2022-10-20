@@ -44,20 +44,20 @@ class OpenAIChatbot(val description: String, val userName: String, val agentName
         }.joinToString(separator = "\n")
 
 
-//        client.emit("request", true )
-//        client.on("emotion") { a ->
-//            if (a[0] != null) {
-//                val data = a[0] as String
-//                emotion = data;
-//                print("EMOTION-----------$emotion")
-//            }
-//        }
-//
-//        if (emotion != "" && !emotion.equals(previousEmotion)) {
-//            history = "$history$userName is visibly $emotion"
-//            previousEmotion = emotion
-//            emotion = ""
-//        }
+        client.emit("request", true )
+        client.on("emotion") { a ->
+            if (a[0] != null) {
+                val data = a[0] as String
+                emotion = data;
+                print("EMOTION-----------$emotion")
+            }
+        }
+
+        if (emotion != "" && !emotion.equals(previousEmotion)) {
+            history = "$history$userName is visibly $emotion"
+            previousEmotion = emotion
+            emotion = ""
+        }
 
         if (msg) {
             history = "$history okay"
