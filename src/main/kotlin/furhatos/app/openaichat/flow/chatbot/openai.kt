@@ -7,7 +7,7 @@ import furhatos.flow.kotlin.Furhat
 
 
 /** API Key to GPT3 language model. Get access to the API and genereate your key from: https://openai.com/api/ **/
-val serviceKey = "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"
+val serviceKey = "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"
 
 class OpenAIChatbot(val description: String, val userName: String, val agentName: String) {
 
@@ -44,20 +44,20 @@ class OpenAIChatbot(val description: String, val userName: String, val agentName
         }.joinToString(separator = "\n")
 
 
-        client.emit("request", true )
-        client.on("emotion") { a ->
-            if (a[0] != null) {
-                val data = a[0] as String
-                emotion = data;
-                print("EMOTION-----------$emotion")
-            }
-        }
-
-        if (emotion != "" && !emotion.equals(previousEmotion)) {
-            history = "$history$userName is visibly $emotion"
-            previousEmotion = emotion
-            emotion = ""
-        }
+//        client.emit("request", true )
+//        client.on("emotion") { a ->
+//            if (a[0] != null) {
+//                val data = a[0] as String
+//                emotion = data;
+//                print("EMOTION-----------$emotion")
+//            }
+//        }
+//
+//        if (emotion != "" && !emotion.equals(previousEmotion)) {
+//            history = "$history$userName is visibly $emotion"
+//            previousEmotion = emotion
+//            emotion = ""
+//        }
 
         if (msg) {
             history = "$history okay"
@@ -83,6 +83,7 @@ class OpenAIChatbot(val description: String, val userName: String, val agentName
             val response = completion.drop(prompt.length).trim()
             return response
         } catch (e: Exception) {
+            print(e)
             println("Problem with connection to OpenAI")
         }
 

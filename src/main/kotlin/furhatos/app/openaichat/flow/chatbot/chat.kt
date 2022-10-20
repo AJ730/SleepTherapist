@@ -3,6 +3,7 @@ package furhatos.app.openaichat.flow.chatbot
 import furhatos.app.openaichat.flow.*
 import furhatos.app.openaichat.flow.chatbot.how_are_you.NegativeExpressionEntity
 import furhatos.app.openaichat.flow.chatbot.how_are_you.PositiveReactionIntent
+import furhatos.app.openaichat.flow.chatbot.how_are_you.TiredExpressionEntity
 import furhatos.app.openaichat.flow.chatbot.how_are_you.phrases
 import furhatos.app.openaichat.setting.activate
 import furhatos.app.openaichat.setting.hostPersona
@@ -15,10 +16,8 @@ import io.socket.client.Socket
 import java.io.*
 
 
-
 var msocket: Socket? = null
 val MainChat = state(Parent) {
-
 
 
     SocketHandler
@@ -57,6 +56,14 @@ val MainChat = state(Parent) {
         delay(400)
         goto(Name)
     }
+
+    onResponse<TiredExpressionEntity> {
+        furhat.say(phrases.wellFeelingsAreComplex)
+        furhat.gesture(Gestures.ExpressSad)
+        delay(400)
+        goto(Name)
+    }
+
 
 
     onReentry {

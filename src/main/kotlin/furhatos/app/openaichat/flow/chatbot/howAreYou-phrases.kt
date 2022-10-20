@@ -48,11 +48,10 @@ class HowAreYouPhrases {
 
     val wellFeelingsAreComplex: Utterance
         get() = utterance {
-            +Gestures.Thoughtful(0.6, 2.0)
+            +Gestures.ExpressSad(0.6, 2.0)
             random {
-                +"Well, feelings are complex."
-                +"Well, feelings can be complex."
-                +"I guess feelings can be complex."
+                +"I am sorry, I hope our session makes you feel better."
+                +"I am sorry, I  hope I can make you feel better."
             }
         }
 }

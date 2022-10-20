@@ -23,6 +23,25 @@ class PositiveReactionIntent(
     }
 }
 
+
+class TiredExpressionEntity : EnumEntity() {
+        override fun getEnum(lang: Language): List<String> {
+                return listOf(
+                        "I am very tired",
+                        "I am worn out ",
+                        "I don't have energy",
+                        "I am exhausted",
+                        "I am beat",
+                        "I am wiped out",
+                        "I am zonked",
+                        "I am shagged",
+                        "I am high",
+                        "I am wrecked"
+                )
+        }
+}
+
+
 class PositiveExpressionEntity : EnumEntity() {
     override fun getEnum(lang: Language): List<String> {
         return listOf(
@@ -81,7 +100,7 @@ class PositiveExpressionEntity : EnumEntity() {
                 "gratified",
                 "intoxicated",
                 "jolly",
-                "laughing",
+                "lau ghing",
                 "light",
                 "looking good",
                 "mirthful",
@@ -108,6 +127,7 @@ class NegativeExpressionEntity : EnumEntity() {
                 "horrible",
                 "awful",
                 "mehhh",
+                "tired",
                 "yuck",
                 "die",
                 "dreadful",
