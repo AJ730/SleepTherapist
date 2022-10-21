@@ -26,15 +26,16 @@ fun main(args: Array<String>) {
     LogisticMultiIntentClassifier.setAsDefault()
     Skill.main(args)
 
-//    Furhat.turnTakingPolicy = object : TurnTakingPolicy {
-//        override fun turnYieldTimeout(response: Response<*>): Int {
-//            if (response.intent == NullIntent) {
-//                return 8000
-//            } else {
-//                return 0
-//            }
-//        }
-//    }
+    Furhat.turnTakingPolicy = object : TurnTakingPolicy {
+        override fun turnYieldTimeout(response: Response<*>): Int {
+            if (response.speech.length < 1000) {
+                // The response was less than 1000ms long, let's give the user 2000ms more to continue speaking
+                return 2000
+            } else {
+                return 0
+            }
+        }
+    }
 }
 //    SocketHandler
 //    SocketHandler.setSocket()

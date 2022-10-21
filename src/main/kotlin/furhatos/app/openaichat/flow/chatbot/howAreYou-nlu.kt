@@ -18,10 +18,21 @@ class PositiveReactionIntent(
     override fun getNegativeExamples(lang: Language): List<String> {
         return listOf(
                 "not @positiveExpressionEntity",
+                "not very @positiveExpressionEntity",
                 "@negativeExpressionEntity"
         )
     }
 }
+
+class HowareYouIntent(
+        val howareyou:HowAreYouEntity? = null):Intent() {
+        override fun getExamples(lang: Language): List<String> {
+                return listOf(
+                        "@howareyou"
+                )
+        }
+        }
+
 
 
 class TiredExpressionEntity : EnumEntity() {
@@ -119,6 +130,15 @@ class PositiveExpressionEntity : EnumEntity() {
     }
 }
 
+class HowAreYouEntity : EnumEntity() {
+        override fun getEnum(lang: Language): List<String> {
+                return listOf("How are you",
+                        "What about you",
+                        "and you",
+                        "you")
+        }
+}
+
 class NegativeExpressionEntity : EnumEntity() {
     override fun getEnum(lang: Language): List<String> {
         return listOf(
@@ -142,7 +162,7 @@ class NegativeExpressionEntity : EnumEntity() {
                 "too shabby",
                 "flawed:flawed,flaws",
                 "sad",
-                ""
+                "not very good"
         )
     }
 }

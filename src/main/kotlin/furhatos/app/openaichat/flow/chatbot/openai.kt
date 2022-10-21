@@ -15,7 +15,7 @@ class OpenAIChatbot(val description: String, val userName: String, val agentName
 
     // Read more about these settings: https://beta.openai.com/docs/introduction
     var temperature =
-        0.9 // Higher values means the model will take more risks. Try 0.9 for more creative applications, and 0 (argmax sampling) for ones with a well-defined answer.
+        0.7 // Higher values means the model will take more risks. Try 0.9 for more creative applications, and 0 (argmax sampling) for ones with a well-defined answer.
     var maxTokens =
         300 // Length of output generated. 1 token is on average ~4 characters or 0.75 words for English text
     var topP =
@@ -46,22 +46,34 @@ class OpenAIChatbot(val description: String, val userName: String, val agentName
 
         client.emit("request", true )
         client.on("emotion") { a ->
+
             if (a[0] != null) {
                 val data = a[0] as String
                 emotion = data;
-                print("EMOTION-----------$emotion")
+//                print("EMOTION-----------$emotion")
             }
         }
 
         if (emotion != "" && !emotion.equals(previousEmotion)) {
-            history = "$history$userName is visibly $emotion"
+
+            if(emotion == "Happy"){
+                history = "$history.\n $userName: I am smiling."
+            }
+            else if(emotion == "Fearful"){
+                history = "$history.\n $userName: I am tired."
+            }
+            else{
+                history = "$history.\n $userName: I am  $emotion."
+            }
+
             previousEmotion = emotion
             emotion = ""
         }
 
         if (msg) {
-            history = "$history okay"
+            history = "$history $userName: okay"
         }
+
 
         val prompt = "$description\n\n$history\n$agentName:"
         println("-----")
