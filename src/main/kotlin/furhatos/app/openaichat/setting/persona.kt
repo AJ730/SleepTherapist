@@ -23,7 +23,7 @@ class Persona(
 
     /** The prompt for the openAI language model **/
     val chatbot =
-        OpenAIChatbot("The following is a conversation between $name, the $desc, and a sleep deprived student Akash from Norway. Akash needs helps with sleep.", "Akash", name)
+        OpenAIChatbot("The following is a conversation between $name, the $desc, and a sleep deprived student Akash. Akash is too stressful dealing with the projects and exams. And now he needs helps with sleep.", "Akash", name)
 }
 
 fun FlowControlRunner.activate(persona: Persona) {

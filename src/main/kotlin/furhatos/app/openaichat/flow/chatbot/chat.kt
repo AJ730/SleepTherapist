@@ -147,7 +147,7 @@ val sleep: State = state(Parent) {
 
 
     onEntry() {
-        furhat.ask("Tell me a bit about yourself?", endSil = 20000)
+        furhat.ask("Tell me a bit about yourself?")
     }
 
     onInterimResponse(endSil = 5000) {
@@ -165,6 +165,11 @@ val sleep: State = state(Parent) {
         )
     }
 
+    onTime(delay=1000*60*1) {
+        furhat.say("Tell me a little bit about your sleep?")
+        furhat.say("What time do you usually go to bed?")
+        reentry()
+    }
 
     onResponse {
         furhat.gesture(GazeAversion(2.0))
@@ -198,6 +203,8 @@ val sleep: State = state(Parent) {
     }
 
 }
+
+
 
 
 val AfterChat: State = state(Parent) {
