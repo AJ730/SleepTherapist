@@ -23,6 +23,7 @@ val MainChat = state(Parent) {
     msocket = SocketHandler.getSocket()
 
 
+    var badCount = 0
 
     onEntry {
         furhat.setDefaultMicroexpression(blinking = true, facialMovements = true, eyeMovements = true)
@@ -100,12 +101,19 @@ val MainChat = state(Parent) {
     }
 
     onNoResponse {
+        if(badCount >= 2){
+            goto(openAi)
+        }
+
+        badCount++
         reentry()
     }
 }
 
 
 val Name: State = state(Parent) {
+
+    var badCount = 0
 
     onReentry {
         furhat.listen( endSil= 2000)
@@ -122,12 +130,18 @@ val Name: State = state(Parent) {
     }
 
     onNoResponse {
+        if(badCount >= 2){
+            goto(openAi)
+        }
+
+        badCount++
         reentry()
     }
 }
 
 
 val Age: State = state(Parent) {
+    var badCount = 0
 
     onReentry {
         furhat.listen( endSil= 2000)
@@ -143,6 +157,11 @@ val Age: State = state(Parent) {
     }
 
     onNoResponse {
+        if(badCount >= 2){
+            goto(openAi)
+        }
+
+        badCount++
         reentry()
     }
 }
