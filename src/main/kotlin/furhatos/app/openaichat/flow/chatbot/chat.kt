@@ -39,7 +39,7 @@ val MainChat = state(Parent) {
         val positiveWord: String? =
             it.intent.positiveExpressionEntity?.text // Check for what word the person used in the intent
 
-        print(it.secondaryIntent.getIntentCandidate().intentName)
+
         if(it.secondaryIntent!=null && it.secondaryIntent.getIntentCandidate().intentName.equals("furhatos.app.openaichat.flow.chatbot.how_are_you.HowareYouIntent")){
             furhat.say(phrases.userFeelsGoodHowAreYou(positiveWord))
         }
@@ -108,7 +108,7 @@ val MainChat = state(Parent) {
 val Name: State = state(Parent) {
 
     onReentry {
-        furhat.listen(8000)
+        furhat.listen( endSil= 2000)
     }
 
     onEntry() {
@@ -120,13 +120,17 @@ val Name: State = state(Parent) {
     onResponse() {
         goto(Age)
     }
+
+    onNoResponse {
+        reentry()
+    }
 }
 
 
 val Age: State = state(Parent) {
 
     onReentry {
-        furhat.listen(8000)
+        furhat.listen( endSil= 2000)
     }
 
 
@@ -135,19 +139,23 @@ val Age: State = state(Parent) {
     }
 
     onResponse() {
-        goto(sleep)
+        goto(yourself)
+    }
+
+    onNoResponse {
+        reentry()
     }
 }
 
-val sleep: State = state(Parent) {
+val yourself: State = state(Parent) {
 
     onReentry {
-        furhat.listen(10000, 500)
+        furhat.listen( endSil= 2000)
     }
 
 
     onEntry() {
-        furhat.ask("Tell me a bit about yourself?", endSil = 20000)
+        furhat.ask("Tell me a bit about yourself?", endSil = 10000)
     }
 
     onInterimResponse(endSil = 5000) {
@@ -156,7 +164,7 @@ val sleep: State = state(Parent) {
 
     onInterimResponse(endSil = 200) {
         // We give some feedback to the user, "okay" or a nod gesture.
-        random (
+        random(
             // Gestures are async per default, so no need to set the flag
             {
                 furhat.gesture(Gestures.Oh)
@@ -165,11 +173,279 @@ val sleep: State = state(Parent) {
         )
     }
 
-    onTime(delay=1000*60*1) {
-        furhat.say("Tell me a little bit about your sleep?")
-        furhat.say("What time do you usually go to bed?")
+    onResponse {
+        goto(sleptLastNight)
+    }
+
+    onNoResponse {
         reentry()
     }
+}
+
+//    onTime(delay=1000*60*1) {
+//        furhat.say("Tell me a little bit about your sleep?")
+//        furhat.say("What time do you usually go to bed?")
+//        reentry()
+//    }
+
+val sleptLastNight: State = state(Parent){
+    onReentry {
+        furhat.listen( endSil= 1000)
+    }
+
+    onEntry() {
+        furhat.ask("It seems to me that you are a student. If i may ask, did you study until late yesterday? " +
+                "More importantly, Are you getting enough sleep?", endSil = 5000)
+    }
+
+    onInterimResponse(endSil = 5000) {
+        furhat.gesture(Gestures.Nod)
+    }
+
+    onInterimResponse(endSil = 200) {
+        // We give some feedback to the user, "okay" or a nod gesture.
+        random(
+            // Gestures are async per default, so no need to set the flag
+            {
+                furhat.gesture(Gestures.Oh)
+                furhat.gesture(Gestures.BrowRaise(2.0, 200.0))
+            }
+        )
+    }
+    onResponse {
+        goto(sleeptime)
+    }
+
+    onNoResponse {
+        reentry()
+    }
+}
+
+
+val sleeptime: State = state(Parent){
+    onReentry {
+        furhat.listen( endSil= 1000)
+    }
+
+    onEntry() {
+        furhat.ask("What time did you go to bed yesterday?", endSil = 5000)
+    }
+
+    onInterimResponse(endSil = 5000) {
+        furhat.gesture(Gestures.Nod)
+    }
+
+    onInterimResponse(endSil = 200) {
+        // We give some feedback to the user, "okay" or a nod gesture.
+        random(
+            // Gestures are async per default, so no need to set the flag
+            {
+                furhat.gesture(Gestures.Oh)
+                furhat.gesture(Gestures.BrowRaise(2.0, 200.0))
+            }
+        )
+    }
+    onResponse {
+        goto(Sports)
+    }
+
+    onNoResponse {
+        reentry()
+    }
+}
+
+
+val Sports: State = state(Parent){
+    onReentry {
+        furhat.listen( endSil= 2000)
+    }
+
+    onEntry() {
+        furhat.ask("Tell me about your hobbies, do you play any sports?", endSil = 2000)
+    }
+
+    onInterimResponse(endSil = 5000) {
+        furhat.gesture(Gestures.Nod)
+    }
+
+    onInterimResponse(endSil = 6000) {
+        // We give some feedback to the user, "okay" or a nod gesture.
+        random(
+            // Gestures are async per default, so no need to set the flag
+            {
+                furhat.gesture(Gestures.Oh)
+                furhat.gesture(Gestures.BrowRaise(2.0, 200.0))
+            }
+        )
+    }
+    onResponse {
+
+        goto(Therapy)
+    }
+    onNoResponse {
+        reentry()
+    }
+
+}
+
+
+val Therapy: State = state(Parent){
+    onReentry {
+        furhat.listen( endSil= 1000)
+    }
+
+    onEntry() {
+        furhat.gesture(Gestures.Thoughtful)
+        furhat.say(" sports help a lot with sleep.")
+        furhat.say("Sleeping helps a lot with studies. Research shows that sleep helps improve cognitive capabilities which means you will be able to study better. ")
+        furhat.ask("can you tell about how fast you go into sleep?", endSil = 2000)
+    }
+
+    onInterimResponse(endSil = 5000) {
+        furhat.gesture(Gestures.Nod)
+    }
+
+    onInterimResponse(endSil = 2000) {
+        // We give some feedback to the user, "okay" or a nod gesture.
+        random(
+            // Gestures are async per default, so no need to set the flag
+            {
+                furhat.gesture(Gestures.Oh)
+                furhat.gesture(Gestures.BrowRaise(2.0, 200.0))
+            }
+        )
+    }
+    onResponse {
+        goto(remsleep)
+    }
+
+    onNoResponse {
+        reentry()
+    }
+}
+
+val remsleep: State = state(Parent){
+    onReentry {
+        furhat.listen( endSil= 1000)
+    }
+
+    onEntry() {
+        furhat.ask("Do you know what REM sleep is? It is when you enter the stage of rapid eye movement and it is when your whole body rests. Do you think you might have entered rem sleep before?", endSil = 2000)
+    }
+
+    onInterimResponse(endSil = 5000) {
+        furhat.gesture(Gestures.Nod)
+    }
+
+    onInterimResponse(endSil = 1000) {
+        // We give some feedback to the user, "okay" or a nod gesture.
+        random(
+            // Gestures are async per default, so no need to set the flag
+            {
+                furhat.gesture(Gestures.Oh)
+                furhat.gesture(Gestures.BrowRaise(2.0, 200.0))
+            }
+        )
+    }
+    onResponse {
+        goto(sleepParalyis)
+    }
+
+    onNoResponse {
+        reentry()
+    }
+}
+
+val sleepParalyis: State = state(Parent){
+    onReentry {
+        furhat.listen( endSil= 1000)
+    }
+
+    onEntry() {
+        furhat.ask("What do you know about sleep paralysis? Have you ever had such an experience?", endSil = 3000)
+    }
+
+    onInterimResponse(endSil = 5000) {
+        furhat.gesture(Gestures.Nod)
+    }
+
+    onInterimResponse(endSil = 2000) {
+        // We give some feedback to the user, "okay" or a nod gesture.
+        random(
+            // Gestures are async per default, so no need to set the flag
+            {
+                furhat.gesture(Gestures.Oh)
+                furhat.gesture(Gestures.BrowRaise(2.0, 200.0))
+            }
+        )
+    }
+    onResponse {
+        goto(coffee)
+    }
+
+    onNoResponse {
+        reentry()
+    }
+}
+
+val coffee: State = state(Parent){
+    onReentry {
+        furhat.listen( endSil= 1000)
+    }
+
+    onEntry() {
+        furhat.ask("As a student I will be surprised if you don't drink a lot of coffee, or maybe tea or maybe you are a sugar junkie. But do you consume a lot before sleep?", endSil = 2000)
+    }
+
+    onInterimResponse(endSil = 2000) {
+        furhat.gesture(Gestures.Nod)
+    }
+
+    onInterimResponse(endSil = 2000) {
+        // We give some feedback to the user, "okay" or a nod gesture.
+        random(
+            // Gestures are async per default, so no need to set the flag
+            {
+                furhat.gesture(Gestures.Oh)
+                furhat.gesture(Gestures.BrowRaise(2.0, 200.0))
+            }
+        )
+    }
+    onResponse {
+        furhat.say("Alright, now I know a bit about you. In this session you can ask me any questions and lets not make this formal. " +
+                "But a friendly conversation, at the end of this session i hope to have informed you a bit about sleep habits and hopefully cheer you up a bit")
+        furhat.gesture(Gestures.Smile)
+
+        goto(openAi)
+    }
+
+    onNoResponse {
+        reentry()
+    }
+}
+
+val openAi: State = state(Parent){
+
+    onEntry{
+        val response = call {
+            msocket?.let { it1 -> hostPersona.chatbot.getNextResponse(client = it1) }
+        } as String
+        var emotion = Gestures.Blink
+        if (response.endsWith(":)")) {
+            response.dropLast(2);
+            emotion = Gestures.BigSmile
+        }
+
+        if (response.endsWith(":(")) {
+            response.dropLast(2);
+            emotion = Gestures.ExpressSad
+        }
+
+        furhat.gesture(emotion)
+        furhat.ask(response)
+    }
+
+
 
     onResponse {
         furhat.gesture(GazeAversion(2.0))
@@ -201,6 +477,11 @@ val sleep: State = state(Parent) {
         furhat.say(response)
         reentry()
     }
+
+    onReentry {
+        furhat.listen( endSil= 2000)
+    }
+
 
 }
 

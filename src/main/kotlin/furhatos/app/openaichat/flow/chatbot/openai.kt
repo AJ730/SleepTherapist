@@ -4,6 +4,7 @@ import com.theokanning.openai.OpenAiService
 import com.theokanning.openai.completion.CompletionRequest
 import furhatos.flow.kotlin.DialogHistory
 import furhatos.flow.kotlin.Furhat
+import kotlinx.coroutines.Job
 
 
 /** API Key to GPT3 language model. Get access to the API and genereate your key from: https://openai.com/api/ **/
@@ -12,12 +13,12 @@ val serviceKey = "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"
 class OpenAIChatbot(val description: String, val userName: String, val agentName: String) {
 
     val service = OpenAiService(serviceKey)
-
+    var callCount = 0
     // Read more about these settings: https://beta.openai.com/docs/introduction
     var temperature =
         0.8 // Higher values means the model will take more risks. Try 0.9 for more creative applications, and 0 (argmax sampling) for ones with a well-defined answer.
     var maxTokens =
-        200 // Length of output generated. 1 token is on average ~4 characters or 0.75 words for English text
+        500 // Length of output generated. 1 token is on average ~4 characters or 0.75 words for English text
     var topP =
         0.9 // 1.0 is default. An alternative to sampling with temperature, called nucleus sampling, where the model considers the results of the tokens with top_p probability mass. So 0.1 means only the tokens comprising the top 10% probability mass are considered.
     var frequencyPenalty =
@@ -31,7 +32,7 @@ class OpenAIChatbot(val description: String, val userName: String, val agentName
         /** The prompt for the chatbot includes a context of ten "lines" of dialogue. **/
 
 
-        var history = Furhat.dialogHistory.all.mapNotNull {
+        var history = Furhat.dialogHistory.all.takeLast(60).mapNotNull {
             when (it) {
                 is DialogHistory.ResponseItem -> {
                     "$userName: ${it.response.text}"
@@ -44,26 +45,36 @@ class OpenAIChatbot(val description: String, val userName: String, val agentName
         }.joinToString(separator = "\n")
 
 
-        client.emit("request", true )
-        client.on("emotion") { a ->
 
-            if (a[0] != null) {
-                val data = a[0] as String
-                emotion = data;
+        if(callCount %6 == 0) {
+            client.emit("request", true)
+            client.on("emotion") { a ->
+
+                if (a[0] != null) {
+                    val data = a[0] as String
+                    emotion = data;
 //                print("EMOTION-----------$emotion")
+                }
             }
+
+            callCount++;
         }
 
         if (emotion != "" && !emotion.equals(previousEmotion)) {
 
             if(emotion == "Happy"){
-                history = "$history.\n $userName: I am smiling."
+                history = "$history. I am smiling."
             }
             else if(emotion == "Fearful"){
-                history = "$history.\n $userName: I am tired."
+                history = "$history.  I am tired."
             }
+
+            else if(emotion == "Angry"){
+                history = "$history. I am tired."
+            }
+
             else{
-                history = "$history.\n $userName: I am  $emotion."
+                history = "$history. I am  $emotion."
             }
 
             previousEmotion = emotion
