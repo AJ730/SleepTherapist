@@ -479,6 +479,11 @@ val openAi: State = state(Parent){
         goto(AfterChat)
     }
 
+    onTime(540000){
+        furhat.say("I am sorry to interrupt you, but our session is finished.")
+        goto(AfterChat)
+    }
+
 
     onResponse {
         furhat.gesture(GazeAversion(2.0))
