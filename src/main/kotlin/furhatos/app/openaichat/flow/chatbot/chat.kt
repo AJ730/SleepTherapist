@@ -526,6 +526,15 @@ val AfterChat: State = state(Parent) {
         SocketHandler.closeConnection()
         goto(Idle)
     }
+
+    onResponse(){
+        goto(Idle)
+    }
+
+    onNoResponse(){
+        goto(Idle)
+    }
+
 //
 //    onPartialResponse<Yes> {
 //        raise(it.secondaryIntent)
