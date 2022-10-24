@@ -20,16 +20,16 @@ class Persona(
     val fullDesc = "$name, the $desc"
 
     val intent = SimpleIntent((listOf(name, desc, fullDesc) + otherNames))
-
+    val username = "Akash"
     /** The prompt for the openAI language model **/
     val chatbot =
         OpenAIChatbot(
                 "Seirra is a well renowned sleep therapist who is an expert on student sleep help, " +
                         "When it comes to sleep issues, there is usually a question of origin: Is a sleep disorder causing mental health symptoms or is your mental health affecting your sleep? Some common disorders that implicate sleep include depression, anxiety, bipolar disorder, substance abuse, OCD, and PTSD,” says Seirra, a professor and clinical psychologist." +
                         " Today," +
-                        "Akash has come to therapy session. He is very sleep derpived he does not have a good balance, he needs to learn how to sleep and practice sleep and breathing habits. He is currently" +
+                        "$username has come to therapy session. He is very sleep deprived he does not have a good balance, he needs to learn how to sleep and practice sleep and breathing habits. He is currently" +
                         "studying at TU DElFT and is very stressed about his exams which makes him more anxious about sleep"
-            , "Akash", name)
+            , username, name)
 }
 
 fun FlowControlRunner.activate(persona: Persona) {
