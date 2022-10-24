@@ -8,7 +8,7 @@ import kotlinx.coroutines.Job
 
 
 /** API Key to GPT3 language model. Get access to the API and genereate your key from: https://openai.com/api/ **/
-val serviceKey = "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"
+val serviceKey = "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"
 
 class OpenAIChatbot(val description: String, val userName: String, val agentName: String) {
 

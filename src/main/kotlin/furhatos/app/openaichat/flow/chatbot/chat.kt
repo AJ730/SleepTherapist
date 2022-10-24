@@ -479,7 +479,7 @@ val openAi: State = state(Parent){
         goto(AfterChat)
     }
 
-    onTime(540000){
+    onTime(420000){
         furhat.say("I am sorry to interrupt you, but our session is finished.")
         goto(AfterChat)
     }
