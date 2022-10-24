@@ -32,7 +32,7 @@ class OpenAIChatbot(val description: String, val userName: String, val agentName
         /** The prompt for the chatbot includes a context of ten "lines" of dialogue. **/
 
 
-        var history = Furhat.dialogHistory.all.takeLast(60).mapNotNull {
+        var history = Furhat.dialogHistory.all.takeLast(1).mapNotNull {
             when (it) {
                 is DialogHistory.ResponseItem -> {
                     "$userName: ${it.response.text}"
