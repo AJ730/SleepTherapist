@@ -464,7 +464,7 @@ val openAi: State = state(Parent){
         furhat.ask(response)
     }
 
-    onResponse("can we stop", "goodbye", "I need to go", "I am done", "You ruined my day","Stop", "I have to go","I am done with you", "Can we do this another time") {
+    onResponse("can we stop", "goodbye", "I need to go", "I am done","Stop", "I have to go","I am done with you", "Can we do this another time") {
         furhat.say("Okay, goodbye")
         val stream = PrintStream(File("akash"))
         Furhat.dialogHistory.dump(stream)
